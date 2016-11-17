@@ -4,6 +4,8 @@ require_once(dirname(__FILE__) . '/BaseConsumer.php');
 
 class Consumer extends BaseConsumer {
 
+    protected $consumed;
+
 	public function consume($msgAmount) {
 		$this->target = $msgAmount;
 
