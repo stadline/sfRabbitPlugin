@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php-amqplib/thumper": "0.5.*"
+        "php-amqplib/thumper": "0.5.*",
+        "php-amqplib/php-amqplib": "^2.6"
     },
     "config": {
         "vendor-dir": "lib/vendor"
