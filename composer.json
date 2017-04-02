@@ -1,6 +1,7 @@
 {
     "name": "stadline/sf-rabbit-plugin",
     "description": "RabbitMQ integration for sf1.4",
+    "type": "symfony1-plugin",
     "authors": [
         {
             "name": "fabien rondeau",
