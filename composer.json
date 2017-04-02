@@ -8,5 +8,11 @@
             "email": "fabien.rondeau@stadline.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php-amqplib/thumper": "0.5.*"
+    },
+    "config": {
+        "vendor-dir": "lib/vendor"
+    }
+
 }
