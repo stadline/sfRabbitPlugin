@@ -1,5 +1,14 @@
 <?php
 
+use Thumper\Producer;
+use Thumper\Consumer;
+use Thumper\AnonConsumer;
+use Thumper\RpcClient;
+use Thumper\RpcServer;
+use PhpAmqpLib\Connection\AMQPLazyConnection;
+use Thumper\ConnectionRegistry;
+
+
 class sfRabbit {
 
 	protected static function getConnectionParams($name) {
@@ -38,7 +47,12 @@ class sfRabbit {
 		$con_name = (empty($config['connection'])) ? ('default') : ($config['connection']);
 		$con_params = self::getConnectionParams($con_name);
 
-		$producer = new Producer($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost']);
+        $connections = array(
+            'default' => new AMQPLazyConnection($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost'])
+        );
+        $registry = new ConnectionRegistry($connections, 'default');
+
+        $producer = new Producer($registry->getConnection());
 
 		$exchange_options = empty($config['exchange_options']) ? array() : $config['exchange_options'];
 		$producer->setExchangeOptions($exchange_options);
@@ -55,7 +69,12 @@ class sfRabbit {
 		$con_name = (empty($config['connection'])) ? ('default') : ($config['connection']);
 		$con_params = self::getConnectionParams($con_name);
 
-		$consumer = new Consumer($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost']);
+        $connections = array(
+            'default' => new AMQPLazyConnection($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost'])
+        );
+        $registry = new ConnectionRegistry($connections, 'default');
+
+		$consumer = new Consumer($registry->getConnection());
 
 		$exchange_options = empty($config['exchange_options']) ? array() : $config['exchange_options'];
 		$consumer->setExchangeOptions($exchange_options);
@@ -84,7 +103,12 @@ class sfRabbit {
 		$con_name = (empty($config['connection'])) ? ('default') : ($config['connection']);
 		$con_params = self::getConnectionParams($con_name);
 
-		$consumer = new AnonConsumer($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost']);
+        $connections = array(
+            'default' => new AMQPLazyConnection($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost'])
+        );
+        $registry = new ConnectionRegistry($connections, 'default');
+
+		$consumer = new AnonConsumer($registry->getConnection());
 
 		$exchange_options = empty($config['exchange_options']) ? array() : $config['exchange_options'];
 		$consumer->setExchangeOptions($exchange_options);
@@ -116,7 +140,12 @@ class sfRabbit {
 		$con_name = (empty($config['connection'])) ? ('default') : ($config['connection']);
 		$con_params = self::getConnectionParams($con_name);
 
-		$client = new AmqpRpcClient($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost']);
+        $connections = array(
+            'default' => new AMQPLazyConnection($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost'])
+        );
+        $registry = new ConnectionRegistry($connections, 'default');
+
+		$client = new RpcClient($registry->getConnection());
 		$client->initClient();
 
 		return $client;
@@ -135,8 +164,12 @@ class sfRabbit {
 
 		$con_name = (empty($config['connection'])) ? ('default') : ($config['connection']);
 		$con_params = self::getConnectionParams($con_name);
+        $connections = array(
+            'default' => new AMQPLazyConnection($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost'])
+        );
+        $registry = new ConnectionRegistry($connections, 'default');
 
-		$server = new AmqpRpcServer($con_params['host'], $con_params['port'], $con_params['user'], $con_params['password'], $con_params['vhost']);
+		$server = new RpcServer($registry->getConnection());
 		$server->initServer($name);
 
 		$callback = $config['callback'];
