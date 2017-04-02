@@ -28,6 +28,12 @@ EOF;
 	protected function execute($arguments = array(), $options = array()) {
 		define('AMQP_DEBUG', (bool) sfConfig::get('app_sfRabbitPlugin_debug', 0));
 
+        // initialize the context
+        sfContext::createInstance($this->configuration);
+
+        // initialize the database connection
+        new sfDatabaseManager($this->configuration);
+
 		$m = $options['messages'];
 
 		while (true) {
