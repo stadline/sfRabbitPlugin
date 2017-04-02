@@ -1,0 +1,11 @@
+{
+    "name": "stadline/sf-rabbit-plugin",
+    "description": "RabbitMQ integration for sf1.4",
+    "authors": [
+        {
+            "name": "fabien rondeau",
+            "email": "fabien.rondeau@stadline.com"
+        }
+    ],
+    "require": {}
+}
